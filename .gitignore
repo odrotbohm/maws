@@ -1,0 +1,14 @@
+# Git
+*.orig
+
+# Maven
+target/
+
+# Eclipse
+.settings/
+.project
+.classpath
+.asciidoctor/
+
+# IDEA
+.idea/

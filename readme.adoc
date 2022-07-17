@@ -1,0 +1,3 @@
+= Modulith Applications with Spring – sample code
+
+This repository contains the sample code for the book "Modulithic Applications with Spring".

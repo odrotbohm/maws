@@ -1,0 +1,26 @@
+= ACME Developer documentation
+:generated-docs: ../../../target/moduliths-docs
+
+== Overview
+
+plantuml::{generated-docs}/components.uml[format=svg,title="ACME Commerce component overview"]
+
+== Catalog
+
+plantuml::{generated-docs}/module-catalog.uml[format=svg,title="Catalog component overview"]
+include::{generated-docs}/module-catalog.adoc[]
+
+== Catalog
+
+plantuml::{generated-docs}/module-customer.uml[format=svg,title="Customer component overview"]
+include::{generated-docs}/module-customer.adoc[]
+
+== Inventory
+
+plantuml::{generated-docs}/module-inventory.uml[format=svg,title="Inventory component overview"]
+include::{generated-docs}/module-inventory.adoc[]
+
+== Order
+
+plantuml::{generated-docs}/module-order.uml[format=svg,title="Order component overview"]
+include::{generated-docs}/module-order.adoc[]
