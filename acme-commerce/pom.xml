@@ -12,13 +12,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.0.2</version>
 	</parent>
 
 	<properties>
 		<java.version>17</java.version>
 		<modulith.version>0.1.0-SNAPSHOT</modulith.version>
-		<spring-hateoas.version>2.0.0-SNAPSHOT</spring-hateoas.version>
 	</properties>
 
 	<dependencyManagement>
