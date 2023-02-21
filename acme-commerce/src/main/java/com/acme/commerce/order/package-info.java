@@ -1,2 +1,2 @@
 @org.springframework.lang.NonNullApi
-package com.acme.commerce.catalog;
+package com.acme.commerce.order;
