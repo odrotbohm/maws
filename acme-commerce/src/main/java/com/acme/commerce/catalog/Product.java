@@ -16,13 +16,9 @@
 package com.acme.commerce.catalog;
 
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Value;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,6 +29,7 @@ import javax.money.MonetaryAmount;
 
 import org.jmolecules.ddd.types.AggregateRoot;
 import org.jmolecules.ddd.types.Identifier;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.util.Streamable;
 import org.springframework.util.Assert;
 
@@ -46,9 +43,7 @@ import com.acme.commerce.core.Quantity;
  *
  * @author Oliver Drotbohm
  */
-@Entity
-@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED, onConstructor = @__(@Deprecated))
-public class Product implements AggregateRoot<Product, ProductIdentifier> {
+public class Product extends AbstractAggregateRoot<Product> implements AggregateRoot<Product, ProductIdentifier> {
 
 	private static final String INVALID_METRIC = "Product %s does not support quantity %s using metric %s!";
 
@@ -84,6 +79,8 @@ public class Product implements AggregateRoot<Product, ProductIdentifier> {
 		this.name = name;
 		this.price = price;
 		this.metric = metric;
+
+		registerEvent(new ProductAdded(id));
 	}
 
 	/*
@@ -143,7 +140,7 @@ public class Product implements AggregateRoot<Product, ProductIdentifier> {
 	public void verify(Quantity quantity) {
 
 		if (!supports(quantity)) {
-			throw new MetricMismatchException(String.format(INVALID_METRIC, this, quantity, quantity.getMetric()));
+			throw new MetricMismatchException(INVALID_METRIC.formatted(this, quantity, quantity.getMetric()));
 		}
 	}
 
@@ -173,11 +170,10 @@ public class Product implements AggregateRoot<Product, ProductIdentifier> {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s, %s, %s, handled in %s", name, id, price, metric);
+		return "%s, %s, %s, handled in %s".formatted(name, id, price, metric);
 	}
 
-	@Value
-	public static final class ProductIdentifier implements Identifier {
-		UUID id;
-	}
+	public static record ProductAdded(ProductIdentifier id) {}
+
+	public record ProductIdentifier(UUID id) implements Identifier {}
 }
