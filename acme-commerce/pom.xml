@@ -156,7 +156,7 @@
 			<plugin>
 				<groupId>net.bytebuddy</groupId>
 				<artifactId>byte-buddy-maven-plugin</artifactId>
-				<version>1.12.10</version>
+				<version>1.14.0</version>
 				<configuration>
 					<classPathDiscovery>true</classPathDiscovery>
 				</configuration>
