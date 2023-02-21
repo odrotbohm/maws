@@ -16,10 +16,8 @@
 package com.acme.commerce;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.modulith.core.ApplicationModules;
 import org.springframework.modulith.docs.Documenter;
-import org.springframework.modulith.docs.Documenter.CanvasOptions;
-import org.springframework.modulith.docs.Documenter.Options;
-import org.springframework.modulith.model.ApplicationModules;
 
 /**
  * @author Oliver Drotbohm
@@ -29,14 +27,10 @@ class DocumentationTests {
 	@Test
 	void generateDocumentation() throws Exception {
 
-		var modules = ApplicationModules.of(AcmeCommerce.class);
-		modules.verify();
+		var modules = ApplicationModules.of(AcmeCommerce.class).verify();
 
-		modules.forEach(System.out::println);
+		System.out.println(modules.toString());
 
-		var options = Options.defaults();
-		var canvasOptions = CanvasOptions.defaults();
-
-		new Documenter(modules).writeDocumentation(options, canvasOptions);
+		new Documenter(modules).writeDocumentation();
 	}
 }

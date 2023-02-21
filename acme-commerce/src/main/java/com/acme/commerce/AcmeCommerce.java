@@ -27,8 +27,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Modulithic(sharedModules = "core")
 @SpringBootApplication
 @EnableAsync
-// @EntityScan({ "com.acme.commerce", "org.moduliths.events.jpa" })
-// @EnablePersistentDomainEvents
 @ConfigurationPropertiesScan
 public class AcmeCommerce {
 

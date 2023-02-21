@@ -17,7 +17,6 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<modulith.version>0.1.0-SNAPSHOT</modulith.version>
 	</properties>
 
 	<dependencyManagement>
@@ -26,6 +25,13 @@
 				<groupId>org.jmolecules</groupId>
 				<artifactId>jmolecules-bom</artifactId>
 				<version>2022.3.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.experimental</groupId>
+				<artifactId>spring-modulith-bom</artifactId>
+				<version>0.4.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -92,13 +98,11 @@
 		<dependency>
 			<groupId>org.springframework.experimental</groupId>
 			<artifactId>spring-modulith-starter-jpa</artifactId>
-			<version>${modulith.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.experimental</groupId>
 			<artifactId>spring-modulith-starter-test</artifactId>
-			<version>${modulith.version}</version>
 			<scope>test</scope>
 		</dependency>
 
