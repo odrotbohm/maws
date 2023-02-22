@@ -17,7 +17,6 @@ package com.acme.commerce.order;
 
 import lombok.Getter;
 import lombok.ToString;
-import lombok.Value;
 
 import java.util.UUID;
 
@@ -69,7 +68,7 @@ public class LineItem implements Entity<Order, LineItemIdentifier>, Priced {
 		Assert.notNull(quantity, "Quantity must be not null!");
 
 		if (!product.supports(quantity)) {
-			throw new MetricMismatchException(String.format("Product %s does not support quantity %s!", product, quantity));
+			throw new MetricMismatchException("Product %s does not support quantity %s!".formatted(product, quantity));
 		}
 
 		this.productIdentifier = Association.forId(product.getId());
@@ -104,8 +103,5 @@ public class LineItem implements Entity<Order, LineItemIdentifier>, Priced {
 		return this.productIdentifier.pointsTo(identifier);
 	}
 
-	@Value
-	public final class LineItemIdentifier implements Identifier {
-		UUID id;
-	}
+	public record LineItemIdentifier(UUID id) implements Identifier {}
 }

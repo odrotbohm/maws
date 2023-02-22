@@ -15,9 +15,9 @@
  */
 package com.acme.commerce.order;
 
-import lombok.Value;
-
 import org.jmolecules.event.types.DomainEvent;
+
+import com.acme.commerce.order.Order.OrderIdentifier;
 
 /**
  * Events published by the order module.
@@ -26,49 +26,9 @@ import org.jmolecules.event.types.DomainEvent;
  */
 public class OrderEvents {
 
-	@Value(staticConstructor = "of")
-	public static class OrderCompleted implements DomainEvent {
+	public record OrderCompleted(OrderIdentifier orderId) implements DomainEvent {}
 
-		Order order;
+	public record OrderPaid(OrderIdentifier orderId) implements DomainEvent {}
 
-		/*
-		 * (non-Javadoc)
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "OrderCompleted";
-		}
-	}
-
-	@Value(staticConstructor = "of")
-	public static class OrderPaid implements DomainEvent {
-
-		Order order;
-
-		/*
-		 * (non-Javadoc)
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "OrderPaid";
-		}
-	}
-
-	@Value(staticConstructor = "of")
-	public static class OrderCanceled implements DomainEvent {
-
-		Order order;
-		String reason;
-
-		/*
-		 * (non-Javadoc)
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "OrderCanceled: " + reason;
-		}
-	}
+	public record OrderCanceled(OrderIdentifier orderId, String reason) implements DomainEvent {}
 }

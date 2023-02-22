@@ -22,7 +22,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.Value;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -153,7 +152,7 @@ public class Order extends AbstractAggregateRoot<Order> implements AggregateRoot
 	 *
 	 * @param orderLine must not be {@literal null}.
 	 */
-	public void remove(LineItem orderLine) {
+	void remove(LineItem orderLine) {
 
 		Assert.notNull(orderLine, "OrderLine must not be null!");
 		assertOrderIsOpen();
@@ -203,7 +202,7 @@ public class Order extends AbstractAggregateRoot<Order> implements AggregateRoot
 
 		this.orderStatus = OrderStatus.COMPLETED;
 
-		registerEvent(OrderCompleted.of(this));
+		registerEvent(new OrderCompleted(id));
 
 		return this;
 	}
@@ -219,12 +218,12 @@ public class Order extends AbstractAggregateRoot<Order> implements AggregateRoot
 		Assert.isTrue(!isCanceled(), "Order is already cancelled!");
 
 		if (!isCompleted()) {
-			registerEvent(OrderCompleted.of(this));
+			registerEvent(new OrderCompleted(id));
 		}
 
 		this.orderStatus = OrderStatus.CANCELLED;
 
-		registerEvent(OrderCanceled.of(this, reason));
+		registerEvent(new OrderCanceled(id, reason));
 
 		return this;
 	}
@@ -243,7 +242,7 @@ public class Order extends AbstractAggregateRoot<Order> implements AggregateRoot
 
 		this.orderStatus = OrderStatus.PAID;
 
-		registerEvent(OrderPaid.of(this));
+		registerEvent(new OrderPaid(id));
 
 		return this;
 	}
@@ -259,8 +258,5 @@ public class Order extends AbstractAggregateRoot<Order> implements AggregateRoot
 		}
 	}
 
-	@Value
-	public final class OrderIdentifier implements Identifier {
-		UUID id;
-	}
+	public record OrderIdentifier(UUID id) implements Identifier {}
 }

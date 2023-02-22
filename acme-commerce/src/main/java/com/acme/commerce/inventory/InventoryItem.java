@@ -15,16 +15,15 @@
  */
 package com.acme.commerce.inventory;
 
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.PrePersist;
 import lombok.Getter;
-import lombok.Value;
 
 import java.util.UUID;
 
 import org.jmolecules.ddd.types.AggregateRoot;
 import org.jmolecules.ddd.types.Association;
 import org.jmolecules.ddd.types.Identifier;
+import org.jmolecules.event.types.DomainEvent;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.util.Assert;
 
@@ -32,6 +31,7 @@ import com.acme.commerce.catalog.Product;
 import com.acme.commerce.catalog.Product.ProductIdentifier;
 import com.acme.commerce.core.Quantity;
 import com.acme.commerce.inventory.InventoryEvents.QuantityReduced;
+import com.acme.commerce.inventory.InventoryItem.InventoryItemIdentifier;
 
 /**
  * An {@link InventoryItem} associates a product with a {@link Quantity} to keep track of how many items per product are
@@ -39,10 +39,9 @@ import com.acme.commerce.inventory.InventoryEvents.QuantityReduced;
  *
  * @author Oliver Drotbohm
  */
-@EntityListeners(InventoryItemCreationListener.class)
 @Getter
 public class InventoryItem extends AbstractAggregateRoot<InventoryItem>
-		implements AggregateRoot<InventoryItem, Identifier> {
+		implements AggregateRoot<InventoryItem, InventoryItemIdentifier> {
 
 	private final InventoryItemIdentifier inventoryItemIdentifier = new InventoryItemIdentifier(
 			UUID.randomUUID());
@@ -63,6 +62,8 @@ public class InventoryItem extends AbstractAggregateRoot<InventoryItem>
 
 		this.quantity = quantity;
 		this.productAssociation = Association.forId(productIdentifier);
+
+		registerEvent(new InventoryItemAdded(inventoryItemIdentifier));
 	}
 
 	public final InventoryItemIdentifier getId() {
@@ -88,9 +89,7 @@ public class InventoryItem extends AbstractAggregateRoot<InventoryItem>
 
 		Assert.notNull(quantity, "Quantity must not be null!");
 		Assert.isTrue(this.quantity.isGreaterThanOrEqualTo(quantity),
-				String.format("Insufficient quantity! Have %s but was requested to reduce by %s.", this.quantity, quantity));
-
-		// getProduct().verify(quantity);
+				"Insufficient quantity! Have %s but was requested to reduce by %s.".formatted(this.quantity, quantity));
 
 		this.quantity = this.quantity.subtract(quantity);
 
@@ -151,12 +150,11 @@ public class InventoryItem extends AbstractAggregateRoot<InventoryItem>
 	@Override
 	public String toString() {
 
-		return String.format("%s(%s) for Product(%s) with quantity %s", //
+		return "%s(%s) for Product(%s) with quantity %s".formatted(
 				getClass().getSimpleName(), getId(), productAssociation.getId(), getQuantity());
 	}
 
-	@Value
-	public final class InventoryItemIdentifier implements Identifier {
-		UUID id;
-	}
+	static record InventoryItemAdded(InventoryItemIdentifier id) implements DomainEvent {}
+
+	public record InventoryItemIdentifier(UUID id) implements Identifier {}
 }

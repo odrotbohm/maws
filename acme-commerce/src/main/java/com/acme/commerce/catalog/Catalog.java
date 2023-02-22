@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.jmolecules.spring.AssociationResolver;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.util.Streamable;
 
@@ -31,7 +32,8 @@ import com.acme.commerce.catalog.Product.ProductIdentifier;
  * @author Oliver Drotbohm
  */
 public interface Catalog
-		extends PagingAndSortingRepository<Product, ProductIdentifier>, AssociationResolver<Product, ProductIdentifier> {
+		extends CrudRepository<Product, ProductIdentifier>, PagingAndSortingRepository<Product, ProductIdentifier>,
+		AssociationResolver<Product, ProductIdentifier> {
 
 	/**
 	 * Returns all {@link Product}s assigned to the given category.

@@ -115,7 +115,7 @@ class InventoryManagement {
 
 		if (!item.isPresent() && inventory.findByProductIdentifier(productIdentifier.getId()).isEmpty()) {
 			throw new IllegalArgumentException(
-					String.format("Couldn't find InventoryItem for product %s!", productIdentifier));
+					"Couldn't find InventoryItem for product %s!".formatted(productIdentifier));
 		}
 
 		return Optionals.toStream(item);

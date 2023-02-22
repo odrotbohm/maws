@@ -40,7 +40,7 @@ public enum Metric {
 	/**
 	 * Creates a new {@link Metric} with the given primary abbreviation and a possibly additional ones that are used for
 	 * parsing {@link Metric} instances from {@link String} sources.
-	 * 
+	 *
 	 * @param primaryAbbreviation must not be {@literal null}.
 	 * @param additionalAbbreviations must not be {@literal null}, see {@link #from(String)}.
 	 */
@@ -55,7 +55,7 @@ public enum Metric {
 
 	/**
 	 * Returns whether the given {@link Metric} is
-	 * 
+	 *
 	 * @param metric must not be {@literal null}.
 	 * @return
 	 */
@@ -68,7 +68,7 @@ public enum Metric {
 
 	/**
 	 * Returns the {@link Metric} for the given abbreviation.
-	 * 
+	 *
 	 * @param abbreviation must not be {@literal null}.
 	 * @return will never be {@literal null}.
 	 * @throws IllegalArgumentException if no {@link Metric} can be found for the given abbreviation.
@@ -82,6 +82,6 @@ public enum Metric {
 		return Arrays.stream(Metric.values()) //
 				.filter(it -> it.abbreviation.equals(source) || it.abbreviations.contains(source)) //
 				.findFirst() //
-				.orElseThrow(() -> new IllegalArgumentException(String.format("Unsupported abbreviation %s!", abbreviation)));
+				.orElseThrow(() -> new IllegalArgumentException("Unsupported abbreviation %s!".formatted(abbreviation)));
 	}
 }

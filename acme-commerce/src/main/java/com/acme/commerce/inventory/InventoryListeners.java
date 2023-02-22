@@ -23,10 +23,14 @@ import org.jmolecules.event.annotation.DomainEventHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
+import org.springframework.modulith.ApplicationModuleListener;
 import org.springframework.modulith.moments.DayHasPassed;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.acme.commerce.catalog.Product;
+import com.acme.commerce.catalog.Product.ProductAdded;
+import com.acme.commerce.core.Quantity;
 import com.acme.commerce.inventory.InventoryEvents.QuantityReduced;
 import com.acme.commerce.inventory.InventoryEvents.StockShort;
 import com.acme.commerce.order.LineItem;
@@ -34,6 +38,7 @@ import com.acme.commerce.order.Order;
 import com.acme.commerce.order.OrderCompletionFailure;
 import com.acme.commerce.order.OrderEvents.OrderCanceled;
 import com.acme.commerce.order.OrderEvents.OrderCompleted;
+import com.acme.commerce.order.OrderManagement;
 
 /**
  * Event listeners of the inventory module.
@@ -67,6 +72,7 @@ class InventoryListeners {
 					: StockShort.of(item, threshold);
 		}
 
+		@Async
 		@DomainEventHandler
 		void on(DayHasPassed event) {
 
@@ -79,6 +85,18 @@ class InventoryListeners {
 			log.info("Items out of stock on {}:", event.getDate());
 
 			outOfStock.map(Object::toString).forEach(log::info);
+		}
+	}
+
+	@Component
+	@RequiredArgsConstructor
+	static class CatalogListeners {
+
+		private final Inventory inventory;
+
+		@ApplicationModuleListener
+		void on(ProductAdded event) {
+			inventory.save(new InventoryItem(event.id(), Quantity.NONE));
 		}
 	}
 
@@ -95,6 +113,7 @@ class InventoryListeners {
 	static class InventoryOrderEventListener {
 
 		private final @NonNull InventoryManagement management;
+		private final @NonNull OrderManagement orders;
 
 		/**
 		 * Invokes {@link UniqueInventory} checks for all {@link LineItem} of the {@link Order} in the given
@@ -104,9 +123,9 @@ class InventoryListeners {
 		 * @throws OrderCompletionFailure in case any of the {@link LineItem} items contained in the order and supported by
 		 *           the configured {@link LineItemFilter} is not available in sufficient quantity.
 		 */
-		@EventListener
+		@ApplicationModuleListener
 		public void on(OrderCompleted event) throws OrderCompletionFailure {
-			management.verifyAndUpdate(event.getOrder());
+			management.verifyAndUpdate(orders.get(event.orderId()).orElseThrow());
 		}
 
 		/**
@@ -116,7 +135,7 @@ class InventoryListeners {
 		 */
 		@EventListener
 		public void on(OrderCanceled event) {
-			management.cancelOrder(event.getOrder());
+			management.cancelOrder(orders.get(event.orderId()).orElseThrow());
 		}
 	}
 }

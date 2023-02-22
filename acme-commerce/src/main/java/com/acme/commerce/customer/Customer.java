@@ -16,7 +16,6 @@
 package com.acme.commerce.customer;
 
 import lombok.Getter;
-import lombok.Value;
 
 import java.util.UUID;
 
@@ -36,8 +35,5 @@ public class Customer implements AggregateRoot<Customer, CustomerIdentifier> {
 		this.address = address;
 	}
 
-	@Value
-	public final class CustomerIdentifier implements Identifier {
-		UUID id;
-	}
+	public record CustomerIdentifier(UUID id) implements Identifier {}
 }

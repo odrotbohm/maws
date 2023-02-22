@@ -114,6 +114,19 @@ public class Quantity implements ValueObject {
 	}
 
 	/**
+	 * Returns whether the {@link Quantity} is compatible with the {@link Metric} of the given {@link Quantity}.
+	 *
+	 * @param quantity must not be {@literal null}.
+	 * @return
+	 */
+	public boolean isCompatibleWith(Quantity quantity) {
+
+		Assert.notNull(quantity, "Quantity must not be null!");
+
+		return isCompatibleWith(quantity.getMetric());
+	}
+
+	/**
 	 * Returns whether the {@link Quantity} is compatible with the given {@link Metric}.
 	 *
 	 * @param metric must not be {@literal null}.
@@ -221,7 +234,7 @@ public class Quantity implements ValueObject {
 		Assert.notNull(other, "Quantity must not be null!");
 
 		return metric.isCompatibleWith(other.metric) //
-				&& (this.amount.compareTo(other.amount) == 0);
+				&& this.amount.compareTo(other.amount) == 0;
 	}
 
 	/**
@@ -285,12 +298,12 @@ public class Quantity implements ValueObject {
 
 		Assert.notNull(quantity, "Quantity must not be null!");
 
-		if ((this == NONE) || (quantity == NONE)) {
+		if (this == NONE || quantity == NONE) {
 			return;
 		}
 
 		if (!isCompatibleWith(quantity.metric)) {
-			throw new MetricMismatchException(String.format(INCOMPATIBLE, this, quantity), metric, quantity.metric);
+			throw new MetricMismatchException(INCOMPATIBLE.formatted(this, quantity), metric, quantity.metric);
 		}
 	}
 
@@ -300,7 +313,7 @@ public class Quantity implements ValueObject {
 
 		this.metric = metric;
 
-		if ((amount != null) && (Metric.UNIT == metric)) {
+		if (amount != null && Metric.UNIT == metric) {
 			this.amount = BigDecimal.valueOf(amount.longValue());
 		}
 	}

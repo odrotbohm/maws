@@ -27,7 +27,7 @@ import com.acme.commerce.core.Currencies;
  *
  * @author Oliver Drotbohm
  */
-interface Priced {
+public interface Priced {
 
 	/**
 	 * Returns the price of the item.

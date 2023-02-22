@@ -16,7 +16,6 @@
 package com.acme.commerce.inventory;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -35,16 +34,16 @@ public class InventoryEvents {
 
 	/**
 	 * Event being thrown if the stock for particular {@link Product} falls below the threshold configured in
-	 * {@link InventoryProperties}.
+	 * {@link InventoryProperties}. No record as we want to hide the constructor.
 	 *
 	 * @author Oliver Drotbohm
 	 */
-	@Getter
+	@Value
 	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 	public static class StockShort implements DomainEvent {
 
-		private final ProductIdentifier productId;
-		private final Quantity currentQuantity, threshold;
+		ProductIdentifier productId;
+		Quantity currentQuantity, threshold;
 
 		static StockShort of(InventoryItem item, Quantity quantity) {
 			return new StockShort(item.getProductAssociation().getId(), item.getQuantity(), quantity);
