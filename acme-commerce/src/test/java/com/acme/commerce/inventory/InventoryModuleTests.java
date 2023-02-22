@@ -15,17 +15,46 @@
  */
 package com.acme.commerce.inventory;
 
+import static org.assertj.core.api.Assertions.*;
+
+import lombok.RequiredArgsConstructor;
+
+import java.time.Duration;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.modulith.test.ApplicationModuleTest;
+import org.springframework.modulith.test.Scenario;
+
+import com.acme.commerce.catalog.Product.ProductAdded;
+import com.acme.commerce.catalog.Product.ProductIdentifier;
+import com.acme.commerce.inventory.InventoryItem.InventoryItemAdded;
+import com.acme.commerce.order.OrderManagement;
 
 /**
  * @author Oliver Drotbohm
  */
 @ApplicationModuleTest
+@RequiredArgsConstructor
 class InventoryModuleTests {
 
-	@Test
-	void bootstrapsModule() {
+	private final Inventory inventory;
 
+	@MockBean OrderManagement orders;
+
+	@Test
+	void createsInventoryItemOnProductAddition(Scenario scenario) throws Exception {
+
+		var productId = new ProductIdentifier(UUID.randomUUID());
+
+		scenario.publish(new ProductAdded(productId))
+				.andWaitAtMost(Duration.ofSeconds(2)) // optional
+				.forEventOfType(InventoryItemAdded.class)
+				.toArriveAndVerify(it -> {
+
+					assertThat(inventory.findByProductIdentifier(productId)).isPresent();
+					assertThat(inventory.findById(it.id())).isPresent();
+				});
 	}
 }
