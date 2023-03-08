@@ -15,7 +15,7 @@
  */
 package com.acme.commerce.customer;
 
-import org.jmolecules.spring.AssociationResolver;
+import org.jmolecules.ddd.integration.AssociationResolver;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Streamable;
 

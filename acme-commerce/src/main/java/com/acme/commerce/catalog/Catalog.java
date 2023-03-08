@@ -18,7 +18,7 @@ package com.acme.commerce.catalog;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.jmolecules.spring.AssociationResolver;
+import org.jmolecules.ddd.integration.AssociationResolver;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
