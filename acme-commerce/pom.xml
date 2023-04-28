@@ -158,7 +158,9 @@
 
 	<profiles>
 		<profile>
+
 			<id>insight</id>
+
 			<dependencies>
 
 				<!-- Modulith Insight -> Actuator & Observability -->
@@ -193,11 +195,34 @@
 				<dependency>
 					<groupId>net.ttddyy.observation</groupId>
 					<artifactId>datasource-micrometer-spring-boot</artifactId>
-					<version>1.0.1</version>
+					<version>1.0.2</version>
+					<scope>runtime</scope>
+				</dependency>
+
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-docker-compose</artifactId>
+					<scope>runtime</scope>
 				</dependency>
 
 			</dependencies>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<profiles>
+								<profile>insight</profile>
+							</profiles>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
 		</profile>
+
 		<profile>
 			<id>docs</id>
 			<build>
