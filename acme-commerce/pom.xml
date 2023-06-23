@@ -29,9 +29,9 @@
 				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework.experimental</groupId>
+				<groupId>org.springframework.modulith</groupId>
 				<artifactId>spring-modulith-bom</artifactId>
-				<version>0.5.0</version>
+				<version>1.0.0-M1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -93,12 +93,11 @@
 		<!-- Spring Modulith -->
 
 		<dependency>
-			<groupId>org.springframework.experimental</groupId>
+			<groupId>org.springframework.modulith</groupId>
 			<artifactId>spring-modulith-starter-jpa</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>org.springframework.experimental</groupId>
+			<groupId>org.springframework.modulith</groupId>
 			<artifactId>spring-modulith-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -163,9 +162,9 @@
 			<dependencies>
 
 				<!-- Modulith Insight -> Actuator & Observability -->
-				
+
 				<dependency>
-					<groupId>org.springframework.experimental</groupId>
+					<groupId>org.springframework.modulith</groupId>
 					<artifactId>spring-modulith-starter-insight</artifactId>
 					<scope>runtime</scope>
 				</dependency>
